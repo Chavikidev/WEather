@@ -12,7 +12,7 @@ $(function(){
     console.log('JQuery loaded succesfully');
     $('#srch_btn').on('click',function(){
         $('#citySelector').show();
-        
+        $('#citySel option').remove();
         var tst2Search=$('#txtSearch').val();
         searchCity(tst2Search)
     });
@@ -32,6 +32,7 @@ function searchCity(tst2Search){
         url:"https://search.reservamos.mx/api/v2/places?q="+tst2Search,
         method:"GET",
         success:function(data){
+            $('#citySel').append("<option selected>Select your country</option>");
             $.each(data,function(index,element){
                 var opt='<option data-lat="'+element.lat+'" data-long="'+element.long+'">'+element.display+","+element.state+'</option>'
                 $('#citySel').append(opt);
@@ -99,6 +100,10 @@ function createDayCard(dayData){
     }else{
         humidity=dayData.humidity;
     }
+
+    var celcius=(dayData.temp-32) * 5/9 
+    var celciusMin=(dayData.min-32) * 5/9 
+    var celciusMax=(dayData.max-32) * 5/9 
     console.log(dayData.dt);
     var date = new Date(dayData.dt * 1000);
     console.log(date);
@@ -111,15 +116,15 @@ function createDayCard(dayData){
             retStr+='<div class="card-body">';
                 retStr+='<div class="row">';
                     retStr+='<div class="col"><i class="fa-solid fa-cloud-sun"></i> '+dayData.cloud+'</div>';
-                    retStr+='<div class="col"><i class="fa-solid fa-temperature-three-quarters"></i> '+dayData.temp+'</div>';
+                    retStr+='<div class="col"><i class="fa-solid fa-temperature-three-quarters"></i> '+dayData.temp+'°F</div>';
                 retStr+='</div>';
                 retStr+='<div class="row">';
-                    retStr+='<div class="col"><i class="fa-solid fa-circle-minus"></i> '+dayData.min+'</div>';
-                    retStr+='<div class="col"><i class="fa-solid fa-circle-plus"></i> '+dayData.max+'</div>';
+                    retStr+='<div class="col"><i class="fa-solid fa-circle-minus"></i> '+dayData.min+'°F</div>';
+                    retStr+='<div class="col"><i class="fa-solid fa-circle-plus"></i> '+dayData.max+'°F</div>';
                 retStr+='</div>';
                 retStr+='<div class="row">';
                     retStr+='<div class="col"><i class="fa-solid fa-gauge"></i> '+dayData.pressure+'</div>';
-                    retStr+='<div class="col"><i class="fa-solid fa-droplet"></i> '+ humidity +'</div>';
+                    retStr+='<div class="col"><i class="fa-solid fa-droplet"></i> '+ humidity +'%</div>';
                 retStr+='</div>';
             retStr+='</div>';
         retStr+='</div>';
